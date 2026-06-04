@@ -169,6 +169,29 @@ already use it in another harness.
 
 **The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
 
+## Agent OS Routing
+
+When a request needs structured workflow routing, use the reusable `agent-os-*` skills rather than embedding project-specific logic in a single doc.
+
+### Recommended flow
+
+- `agent-os-router` chooses exactly one phase from project state, user intent, and handoff validity.
+- `agent-os-intake` identifies the current state when the request is new or ambiguous.
+- `agent-os-discovery` gathers facts about existing systems and reduces uncertainty.
+- `agent-os-direction` aligns goals, scope, and target outcome before planning.
+- `agent-os-planning` turns an approved direction into a concrete implementation plan.
+- `agent-os-execution` implements an approved plan without widening scope.
+- `agent-os-verification` validates the result before handoff.
+- `agent-os-handoff` summarizes state, decisions, risks, and the next recommended phase.
+
+### Minimal example
+
+If a user says, “I have an existing repo and I’m not sure what this code does,” the router should pick `01 Discovery`.
+If a user says, “The goal is unclear and the scope keeps drifting,” the router should pick `02 Direction`.
+If a user says, “The plan is approved, now implement it,” the router should pick `04 Execution`.
+
+These skills are designed to be reusable across repositories. Project-specific exceptions and overrides should stay in repo-level documentation, not inside the generic skills.
+
 ## What's Inside
 
 ### Skills Library
